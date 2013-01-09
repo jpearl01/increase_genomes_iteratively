@@ -20,14 +20,16 @@ my $dir_count = 2;
 
 for my $i (2..@strains){
     mkdir $i unless (-d $i);
-    open SL, '>',  $i.'\strain_list', or die "Can't open the new strain_list in the directory $i\n";
+    open SL, '>',  $i.'/strain_list', or die "Can't open the new strain_list in the directory $i\n";
     for my $s (0..$i-1){
-	print SL $strains[$s]."\n";
+	print SL $strains[$s];
     }
 } 
 
 my @dirs = `find . -type d`;
 my $dir = getcwd;
+
+open C, '>', 'chart' or die "Can't open the chart file: $!\n";
 
 for my $d (2..@strains){
     print $dir.'/'.$d."\n";
