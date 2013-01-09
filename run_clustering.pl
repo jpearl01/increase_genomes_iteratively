@@ -30,10 +30,16 @@ my @dirs = `find . -type d`;
 my $dir = getcwd;
 
 open C, '>', 'chart' or die "Can't open the chart file: $!\n";
+print C "Total_clusters\tCore_clusters\tGenome_added\n";
 
 for my $d (2..@strains){
     print $dir.'/'.$d."\n";
     chdir($dir.'/'.$d) or warn "Couldn't change the dir: $!\n";
     `~/my_clustergenes/clusterGenes4.pl $orfs $tfasty $contigs .7 .7 .7 >clusterGenes`;
     `~/my_clustergenes/clusterReport.pl < clusterGenes >report_output`;
+    my @clusts = `head -2 report_output`;
+    my ($total) = $clusts[0] =~ /(\d+)$/;
+    my ($core)  = $clusts[1] =~ /(\d+)$/;
+    print C "$total\t$core\t$strains[$d-1]";
+    
 }
